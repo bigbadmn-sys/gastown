@@ -1,29 +1,30 @@
 # gt 1.2 Release Coordination Evidence
 
-Refreshed: 2026-05-23 20:20 UTC
+Refreshed: 2026-05-26 19:45 UTC
 
 Scope: release decision evidence only. This artifact records the current gate map, CI inventory, PR disposition, wrong-target records, and validation/review passes for `gt-12-release-evidence-refresh`.
 
 ## Executive Snapshot
 
-- Release evidence branch: `integration/gt-1-2-convergence-cleanup` at `625bcf8a92f9faef9804f73624a8bf770085ebd2`.
+- Release evidence branch: `integration/gt-1-2-convergence-cleanup` at `863ca7c0f5bdf840371d128146978a402ac9a254`.
 - No GitHub Actions runs exist for `integration/gt-1-2-convergence-cleanup` or `integration/test-beaddolt-hardenning` as branch filters; current workflows primarily run on `main`, `pull_request` to `main`, schedules, tags, and metadata events.
 - `#4110`-`#4113` are internal integration-branch merge PRs and are merged into their subepic integration branches, not into `main`.
-- `#4114` is closed as a wrong-target/non-deliverable artifact and must not be treated as release-gate delivery.
-- Current older PR disposition: `#4085` remains open only as a review/internal reference; `#4086`, `#4087`, `#4088`, `#4089`, and `#4092` are closed as superseded or partially extracted.
+- `#4114` is closed as a wrong-target/non-deliverable artifact and must not be treated as release-gate delivery; `#4109` is also closed/unmerged and carries no release-gate delivery record.
+- Current older PR disposition: `#4085` remains open only as a review/internal reference; `#4086`, `#4087`, `#4088`, `#4089`, and `#4092` are closed as superseded or partially extracted. Replacement main-target paths have advanced: `#4081` and `#4096` are now merged to `main`, while `#4080` and `#4108` are closed.
 
 ## Release Gate Map
 
 | Gate | Branch | Current head | Evidence | Release disposition |
 | --- | --- | --- | --- | --- |
-| Convergence cleanup baseline | `integration/gt-1-2-convergence-cleanup` | `625bcf8a92f9faef9804f73624a8bf770085ebd2` | GitHub branch API: commit message `fix: tolerate reaped active MR during cleanup (gt-rca-alias-no-merge-cleanup)` | Baseline branch for this evidence refresh. |
+| Convergence cleanup baseline | `integration/gt-1-2-convergence-cleanup` | `863ca7c0f5bdf840371d128146978a402ac9a254` | `git ls-remote --heads origin 'integration/gt-1-2-*'`; commit message `fix: reduce witness deacon mail floods (gt-12-deacon-witness-mail-overload)` | Baseline branch for this evidence refresh. |
 | Routing identity gate | `integration/gt-1-2-routing-identity-gate-identity` | `21c5d9244d4a067b72df60de6c808672db9ca620` | PR `#4110` merged 2026-05-23 19:18:52 UTC | Internal integration branch merge recorded. |
 | Capacity and admission gate | `integration/gt-1-2-capacity-and-admission-gate-admission` | `aa3ade0205534ddca44449f1119bd47eb4db6f1c` | PR `#4111` merged 2026-05-23 19:10:56 UTC, merge commit `53f9c3806ce208a7a07c069f2ca0c28007d70ea0` | Internal integration branch merge recorded. |
 | Notification actionability gate | `integration/gt-1-2-notification-actionability-gate-actionability` | `ede0d98af9db24ce83c73ac2265dca1092964a1f` | PR `#4112` merged 2026-05-23 19:18:52 UTC | Internal integration branch merge recorded. |
 | Recovery false-positive matrix | `integration/gt-1-2-recovery-false-positive-matrix-positives` | `fa5a9da9f130ba6f9109ebe0e799d729c2d42534` | PR `#4113` merged 2026-05-23 19:18:53 UTC | Internal integration branch merge recorded. |
-| Release candidate and canary gate | `integration/gt-1-2-release-candidate-and-canary-gate-canary` | `625bcf8a92f9faef9804f73624a8bf770085ebd2` | `git ls-remote --heads origin 'integration/gt-1-2-*'` | Currently equal to convergence baseline; no distinct PR evidence found. |
+| Release candidate and canary gate | `integration/gt-1-2-release-candidate-and-canary-gate-canary` | `625bcf8a92f9faef9804f73624a8bf770085ebd2` | `git ls-remote --heads origin 'integration/gt-1-2-*'`; commit message `fix: tolerate reaped active MR during cleanup (gt-rca-alias-no-merge-cleanup)` | Lags the refreshed convergence baseline; no distinct PR evidence found. |
 | Canonical polecat workstate | `integration/gt-1-2-canonical-polecat-workstate-workstate` | `1d3e6039ffac3af8be5485d0fc8a22e0efbb9cf4` | `git ls-remote --heads origin 'integration/gt-1-2-*'` | Branch exists; no `gt-12` PR disposition found in this refresh. |
 | MR target and source transition | `integration/gt-1-2-mr-target-and-source-transition-gate-source` | `2718682b8b7a1e75aded6ab63029d9820402ac65` | `git ls-remote --heads origin 'integration/gt-1-2-*'` | Branch exists; no `gt-12` PR disposition found in this refresh. |
+| Parent gate rollups | `integration/gt-1-2-canonical-polecat-workstate`, `integration/gt-1-2-capacity-and-admission-gate`, `integration/gt-1-2-mr-target-and-source-transition-gate`, `integration/gt-1-2-notification-actionability-gate`, `integration/gt-1-2-recovery-false-positive-matrix`, `integration/gt-1-2-release-candidate-and-canary-gate`, `integration/gt-1-2-routing-identity-gate` | `b381f60a76589016589fd9be93c18c9902e69c9b` | `git ls-remote --heads origin 'integration/gt-1-2-*'`; commit message `fix: reconcile polecat recovery git state (gt-recovery-false-positive-clean-closed)` | Shared parent rollup state visible in current branch inventory. |
 
 ## CI Inventory
 
@@ -49,6 +50,7 @@ Scope: release decision evidence only. This artifact records the current gate ma
 | `#4112` `Merge: gt-12-notification-regression-tests` | Merged | `integration/gt-1-2-notification-actionability-gate-actionability` | `polecat/radrat/gt-12-notification-regression-tests@mpihccma` | Merged 2026-05-23 19:18:52 UTC, merge commit `ede0d98af9db24ce83c73ac2265dca1092964a1f`; checks: `Block Internal PRs` skipped job `77530910484`, `add-triage-label` success job `77530904269`. | Internal integration branch merge; not a main-target release PR. |
 | `#4113` `Merge: gt-12-live-polecat-fixtures` | Merged | `integration/gt-1-2-recovery-false-positive-matrix-positives` | `polecat/ghoul/gt-12-live-polecat-fixtures@mpih5jxl` | Merged 2026-05-23 19:18:53 UTC, merge commit `fa5a9da9f130ba6f9109ebe0e799d729c2d42534`; checks: `Block Internal PRs` skipped job `77531020190`, `add-triage-label` success job `77531019972`. | Internal integration branch merge; not a main-target release PR. |
 | `#4114` `Merge: gt-pr-main-4089-reuse-startup-fold` | Closed | `integration/test-beaddolt-hardenning` | `polecat/ghoul/gt-pr-main-4089-reuse-startup-fold@mpii6er0` | Closed 2026-05-23 19:19:39 UTC. Comment `4526309016`: `Closing wrong-target PR-mode artifact... Do not merge this branch as part of release-gate delivery.` Checks: `Block Internal PRs` skipped job `77531943075`, `add-triage-label` success job `77531942832`. | Wrong-target/non-deliverable artifact. Do not retarget, merge, or count as delivery. |
+| `#4109` `Merge: gt-12-baseline-ci-inventory` | Closed | `integration/test-beaddolt-hardenning` | `polecat/thunder/gt-12-baseline-ci-inventory@mpig5s75` | Closed 2026-05-23 14:47:42 UTC, not merged, no PR comments recorded by `gh pr view --comments`. | Closed/unmerged internal artifact; no release-gate delivery evidence found. |
 | `#4085` `RCA canonical: design routing repair and migration guard` | Open | `integration/test-beaddolt-hardenning` | `polecat/brotherhood/gt-rca-canon-routing-repair-design` | Comment `4525854875`: open only as review/internal reference, not maintainer-facing merge target; diagnostic/design slice requires separate clean main-target PR or explicit drop decision. | Review-only/internal reference; not release delivery as-is. |
 | `#4086` `fix: block rig add prefix route hijacks` | Closed | `integration/test-beaddolt-hardenning` | `polecat/brahmin/gt-rca-canon-routing-rig-add-mpeuzvbu` | Comment `4525854509`: superseded by clean main-target routing replacement `#4096`; tracked-prefix guard/rollback/tests preserved there. | Closed superseded; do not retarget or merge. |
 | `#4087` `fix: count recovery slots in scheduler capacity` | Closed | `integration/test-beaddolt-hardenning` | `polecat/crater/gt-rca-canon-polecat-refill-capacity@mpev7b1n` | Comment `4525854511`: superseded by replacement capacity path; main-target `#4081` carries admission-cap work and `#4111` folded useful recovery-slot/stale-assignment occupancy cases. | Closed superseded; useful release evidence is `#4111`. |
@@ -60,22 +62,22 @@ Scope: release decision evidence only. This artifact records the current gate ma
 
 ### Baseline/Environmental Signals
 
-These failures are not owned by the `#4110`-`#4114` internal integration PRs. They are either scheduled on `main` at the same SHA as the convergence baseline or metadata-only label automation.
+These failures are not owned by the `#4110`-`#4114` internal integration PRs. They are scheduled or push-run failures on `main` and therefore classify as baseline/mainline signals unless reproduced against a release branch delta.
 
 | Class | Run | Branch/SHA | Failing job evidence | Classification |
 | --- | --- | --- | --- | --- |
-| Baseline scheduled E2E | Run `26326172833` `E2E Tests` | `main` / `625bcf8a92f9faef9804f73624a8bf770085ebd2` | Job `77504209905` `E2E Tests (Container)`, step `Run E2E tests`, failed 2026-05-23 06:53:54 UTC. | Baseline/environmental until reproduced against a branch delta; same SHA as convergence baseline. |
-| Baseline scheduled integration | Run `26326340588` `Nightly Integration Tests` | `main` / `625bcf8a92f9faef9804f73624a8bf770085ebd2` | Job `77504669304` `Full Integration Tests`, step `Run all integration tests`, failed 2026-05-23 07:06:00 UTC. | Baseline/environmental until reproduced against a branch delta; same SHA as convergence baseline. |
-| Metadata automation | Run `26337043294` `Remove needs-info on author response` | `main` / `625bcf8a92f9faef9804f73624a8bf770085ebd2` | Workflow failure on issue-comment metadata event for `fix: collapse status mail enrichment`. | Not a code validation gate; do not classify as release code failure. |
+| Baseline scheduled E2E | Run `26437582676` `E2E Tests` | `main` / `94b3d5aae3d96c1ed9cf1fa7eab51ffdee9cee17` | Job `77823878356` `E2E Tests (Container)`, step `Run E2E tests`, failed 2026-05-26 07:08:20 UTC. | Baseline/environmental until reproduced against a branch delta; same SHA as current `main`. |
+| Baseline scheduled integration | Run `26438097543` `Nightly Integration Tests` | `main` / `94b3d5aae3d96c1ed9cf1fa7eab51ffdee9cee17` | Job `77825538322` `Full Integration Tests`, step `Run all integration tests`, failed 2026-05-26 07:25:02 UTC. | Baseline/environmental until reproduced against a branch delta; same SHA as current `main`. |
+| Baseline main push CI | Run `26420662457` `CI` | `main` / `94b3d5aae3d96c1ed9cf1fa7eab51ffdee9cee17` | Jobs `77774572073` `Lint` and `77774572090` `Test` failed; `Integration Tests` job `77774572091` passed. | Mainline push signal after `#4096` merged; not owned by `#4110`-`#4114` internal integration PRs. |
+| Baseline main push Windows | Run `26420662473` `Windows CI` | `main` / `94b3d5aae3d96c1ed9cf1fa7eab51ffdee9cee17` | Job `77774571977` `Windows Smoke Test`, step `Build binary`, failed 2026-05-25 21:38:37 UTC. | Mainline push signal after `#4096` merged; not owned by `#4110`-`#4114` internal integration PRs. |
 
 ### Branch-Owned or PR-Owned Failing Signals
 
 | PR/branch | Run | Failing job evidence | Classification |
 | --- | --- | --- | --- |
-| `#4080` `fix/polecat-workstate-4074` | CI run `26263001617` | Jobs `77300338263` `Integration Tests`, `77300338267` `Test`, `77300338274` `Lint` failed. | Branch-owned open main-target PR failure; outside `#4110`-`#4114` internal merge evidence. |
-| `#4081` `fix/polecat-cap-admission-4075` | CI run `26185346987`; Windows run `26185346989` | Jobs `77039169592` `Lint`, `77039169636` `Test`, `77039169665` `Integration Tests`, `77039169505` `Windows Smoke Test` failed. | Branch-owned open main-target PR failure; admission/capacity path related but not the `#4111` internal integration merge itself. |
-| `#4096` `polecat/guzzle/main-routing-convergence` | CI run `26298563367` | Jobs `77417512051` `Test` and `77417512096` `Integration Tests` failed; `Lint` job `77417512070` passed. | Branch-owned open main-target PR failure; routing replacement path for `#4086`/`#4088`/`#4092`. |
-| `#4108` `dependabot/npm_and_yarn/gt-model-eval/npm_and_yarn-6c49943208` | CI run `26334452289` | Jobs `77525753579` `Integration Tests`, `77525753580` `Test`, `77525753586` `Lint` failed. | Dependabot branch-owned failure; not release-gate evidence. |
+| `temp-merge-gt-wisp-7bc` / `fix: --force now truly bypasses MR verdict check in polecat nuke` | CI run `26463482040`; Windows run `26463482056` | Jobs `77917419179` `Lint` and `77917419207` `Test` failed; Windows job `77917418798` `Windows Smoke Test`, step `Build binary`, failed. `Integration Tests` job `77917419263` passed. | Branch-owned/temp-merge failure on `d9e3a6a165473f9f43f79a58e0810c5961269a4d`; outside `#4110`-`#4114` internal release evidence. |
+| `doctor/rig-config-sync-clean` and temp merge variants | CI/Windows runs `26421685252`, `26421685230`, `26421755731`, `26421755601` | Branch jobs `77777509560` `Lint` and `77777509503` `Test` failed; branch Windows job `77777509549` `Windows Smoke Test` failed. Temp-merge jobs `77777714979` `Lint` and `77777714981` `Test` failed; temp-merge Windows job `77777714776` `Windows Smoke Test` failed. | Branch-owned doctor-path failures; not release-gate evidence. |
+| Historical `#4080` / `#4081` / `#4096` / `#4108` branch signals | Prior CI runs `26263001617`, `26185346987`, `26185346989`, `26298563367`, `26334452289` | Jobs `77300338263` `Integration Tests`, `77300338267` `Test`, `77300338274` `Lint`, `77039169592` `Lint`, `77039169636` `Test`, `77039169665` `Integration Tests`, `77039169505` `Windows Smoke Test`, `77417512051` `Test`, `77417512096` `Integration Tests`, `77525753579` `Integration Tests`, `77525753580` `Test`, and `77525753586` `Lint` failed. Current PR state changed: `#4080` closed, `#4081` merged to `main`, `#4096` merged to `main`, `#4108` closed. | Not current open release blockers for `#4110`-`#4114`; resulting `main` push failures are tracked above as baseline/mainline signals. |
 
 ### Internal Integration PR Check State
 
@@ -97,7 +99,7 @@ These failures are not owned by the `#4110`-`#4114` internal integration PRs. Th
 12. Queried PR `#4114` JSON and comments; recorded wrong-target/non-deliverable closure comment.
 13. Queried PRs `#4085`-`#4089` and `#4092` JSON/comments; recorded current supersession/internal-reference dispositions.
 14. Queried workflow run lists for `integration/gt-1-2-convergence-cleanup`, `integration/test-beaddolt-hardenning`, recent failures, and target branch metadata.
-15. Queried failed run job details for `26326172833`, `26326340588`, `26337043294`, `26263001617`, `26185346987`, `26185346989`, `26298563367`, and `26334452289` to classify baseline vs branch-owned failures.
+15. Queried failed run job details for `26437582676`, `26438097543`, `26420662457`, `26420662473`, `26463482040`, `26463482056`, `26421685252`, `26421685230`, `26421755731`, and `26421755601` to classify baseline/mainline vs branch-owned failures.
 
 ## Pre-Implementation Review Log
 
@@ -113,6 +115,7 @@ These failures are not owned by the `#4110`-`#4114` internal integration PRs. Th
 - `gh api repos/gastownhall/gastown/actions/runs?branch=integration/gt-1-2-convergence-cleanup&per_page=10` returned `total_count: 0`.
 - `gh api repos/gastownhall/gastown/actions/runs?branch=integration/test-beaddolt-hardenning&per_page=10` returned `total_count: 0`.
 - `gh pr list --search "gt-12 OR gt 1.2"` returned `#4110`-`#4114` and `#4109` as the relevant current `gt-12` PR evidence set.
+- `gh pr view 4080`, `4081`, `4096`, and `4108` verified current replacement-path disposition: `#4081` and `#4096` merged to `main`; `#4080` and `#4108` closed.
 
 ## Post-Implementation Review Log
 
