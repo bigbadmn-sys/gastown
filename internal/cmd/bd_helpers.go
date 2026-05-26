@@ -24,6 +24,7 @@ type bdCmd struct {
 	env        []string
 	stderr     io.Writer
 	autoCommit bool
+	allowStale bool
 	gtRoot     string
 	beadsDir   string
 	routing    bool
@@ -50,6 +51,14 @@ func BdCmd(args ...string) *bdCmd {
 // needs to see the changes from previous calls.
 func (b *bdCmd) WithAutoCommit() *bdCmd {
 	b.autoCommit = true
+	return b
+}
+
+// AllowStale requests bd's stale-read bypass when the installed bd supports it.
+// Unsupported bd versions silently omit the flag so callers can share one
+// compatibility path instead of hardcoding version-specific arguments.
+func (b *bdCmd) AllowStale() *bdCmd {
+	b.allowStale = true
 	return b
 }
 
@@ -208,11 +217,11 @@ func wrapBdCmdTimeout(ctx context.Context, err error) error {
 	return err
 }
 
-// resolvedArgs returns the final args, normalizing --allow-stale to the global
-// flag position when bd supports it and stripping it when bd does not.
+// resolvedArgs returns the final args, normalizing requested stale-read support
+// to bd's global flag position when supported and stripping it when unsupported.
 func (b *bdCmd) resolvedArgs() []string {
 	filtered := make([]string, 0, len(b.args))
-	requestedAllowStale := false
+	requestedAllowStale := b.allowStale
 	for _, a := range b.args {
 		if a == "--allow-stale" {
 			requestedAllowStale = true
@@ -223,7 +232,7 @@ func (b *bdCmd) resolvedArgs() []string {
 	if !requestedAllowStale {
 		return b.args
 	}
-	if beads.BdSupportsAllowStale() {
+	if beads.BdSupportsAllowStaleWithEnv(b.buildEnv()) {
 		return append([]string{"--allow-stale"}, filtered...)
 	}
 	return filtered
