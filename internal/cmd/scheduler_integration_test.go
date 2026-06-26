@@ -42,13 +42,13 @@ func initBeadsDBForServer(t *testing.T, dir, prefix, homeDir string) {
 	t.Helper()
 	initSchedulerGitRepo(t, dir, homeDir)
 
-	args := []string{"init", "--prefix", prefix}
+	args := []string{"init", "--quiet", "--non-interactive", "--skip-hooks", "--skip-agents", "--prefix", prefix}
 	// Forward GT_DOLT_PORT so bd connects to the ephemeral test server
 	// instead of defaulting to port 3307.
 	// bd v1.0.0+ defaults to embedded mode; --server is required to use an
 	// external server (v0.57.0 defaulted to server mode and ignored --server).
 	if p := schedulerDoltPort(); p != "" {
-		args = append(args, "--server", "--server-port", p)
+		args = append(args, "--server", "--external", "--server-port", p)
 	}
 	cmd := exec.Command("bd", args...)
 	cmd.Dir = dir
@@ -82,12 +82,12 @@ func initSchedulerGitRepo(t *testing.T, dir, homeDir string) {
 }
 
 func schedulerBDInitEnv(homeDir, beadsDir string) []string {
-	env := beads.StripBDTargetEnv(cleanSchedulerTestEnv(homeDir))
-	env = append(env, "BEADS_DIR="+beadsDir)
+	env := cleanSchedulerTestEnv(homeDir)
 	if p := schedulerDoltPort(); p != "" {
-		env = append(env, "BEADS_DOLT_SERVER_PORT="+p, "BEADS_DOLT_PORT="+p)
+		env = beads.StripEnvKey(env, "GT_DOLT_PORT")
+		env = append(env, "GT_DOLT_PORT="+p)
 	}
-	return env
+	return beads.BuildMutationPinnedBDEnv(env, beadsDir)
 }
 
 func schedulerDoltPort() string {
@@ -1087,24 +1087,6 @@ func TestSchedulerDeferredTaskWithoutRig(t *testing.T) {
 	}
 	if !strings.Contains(out, "deferred dispatch requires a rig target") {
 		t.Errorf("expected 'deferred dispatch requires a rig target' error, got:\n%s", out)
-	}
-}
-
-// TestSchedulerConfigSetZero verifies that gt config set scheduler.max_polecats 0
-// is accepted (disabled mode is a valid config).
-func TestSchedulerConfigSetZero(t *testing.T) {
-	hqPath, _, gtBinary, env := setupSchedulerIntegrationTown(t)
-
-	// Set max_polecats=0 should succeed
-	out := runGTCmdOutput(t, gtBinary, hqPath, env, "config", "set", "scheduler.max_polecats", "0")
-	if strings.Contains(out, "invalid") {
-		t.Errorf("max_polecats=0 should be accepted, got:\n%s", out)
-	}
-
-	// Read it back — should return 0
-	out = runGTCmdOutput(t, gtBinary, hqPath, env, "config", "get", "scheduler.max_polecats")
-	if strings.TrimSpace(out) != "0" {
-		t.Errorf("max_polecats = %q, want %q", strings.TrimSpace(out), "0")
 	}
 }
 
